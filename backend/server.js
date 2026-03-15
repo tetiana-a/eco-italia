@@ -10,6 +10,24 @@ app.use(cors({
 app.options('*', cors());
 app.use(express.json());
 
+// ── EMAIL via Resend ──
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'kotolup24@gmail.com';
+const FROM_EMAIL = 'Eco Italia <noreply@housefixbrno.cz>';
+
+async function sendEmail({ to, subject, html }) {
+  if (!RESEND_API_KEY) { console.log('No RESEND_API_KEY, skipping email'); return; }
+  try {
+    const r = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${RESEND_API_KEY}` },
+      body: JSON.stringify({ from: FROM_EMAIL, to: Array.isArray(to) ? to : [to], subject, html }),
+    });
+    const d = await r.json();
+    console.log('Email sent:', d.id || d.message);
+  } catch(e) { console.error('Email error:', e.message); }
+}
+
 let products = [
   { id:'1', name:'Extra Virgin Olive Oil Siciliano', nameCs:'Extra panenský olivový olej Siciliano', price:490, category:'oils', image:'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=600&q=85', origin:'Sicílie', eco:5, desc:'Lisovaný za studena z prastarých sicilských olivovníků. Bohatý na polyfenoly a antioxidanty. Certifikace EU Organic.', featured:true },
   { id:'2', name:'Tuscan Rosemary Olive Oil', nameCs:'Toskánský olivový olej s rozmarýnem', price:420, category:'oils', image:'https://images.unsplash.com/photo-1598512752271-33f913a5af13?w=600&q=85', origin:'Toskánsko', eco:5, desc:'Extra panenský olivový olej infuzovaný čerstvým toskánským rozmarýnem. Ideální na salátové dresinky a grilování.', featured:false },
@@ -52,12 +70,68 @@ app.post('/api/products', (req, res) => { const p = { ...req.body, id: Date.now(
 app.put('/api/products/:id', (req, res) => { const i = products.findIndex(p => p.id === req.params.id); if(i===-1) return res.status(404).json({}); products[i] = { ...products[i], ...req.body }; res.json(products[i]); });
 app.delete('/api/products/:id', (req, res) => { products = products.filter(p => p.id !== req.params.id); res.json({ ok:true }); });
 
-app.post('/api/orders', (req, res) => {
+app.post('/api/orders', async (req, res) => {
   const order = { ...req.body, id: nextId++, status:'pending', createdAt: new Date().toISOString() };
   orders.push(order);
   console.log('Order:', order.customer?.name, order.total+'Kč');
+
+  const itemsHtml = (order.items||[]).map(i =>
+    `<tr><td style="padding:8px;border-bottom:1px solid #eee">${i.name}</td><td style="padding:8px;border-bottom:1px solid #eee;text-align:center">×${i.qty}</td><td style="padding:8px;border-bottom:1px solid #eee;text-align:right">${(i.price*i.qty).toLocaleString()} Kč</td></tr>`
+  ).join('');
+
+  // Email zákazníkovi
+  if (order.customer?.email) {
+    await sendEmail({
+      to: order.customer.email,
+      subject: `Eco Italia — Objednávka #${order.id} přijata`,
+      html: `
+        <div style="font-family:sans-serif;max-width:560px;margin:0 auto;color:#333">
+          <div style="background:#04040A;padding:24px;text-align:center">
+            <h1 style="color:#C4A96B;font-size:22px;margin:0;letter-spacing:0.1em">ECO · ITALIA</h1>
+          </div>
+          <div style="padding:32px">
+            <h2 style="color:#04040A">Děkujeme za vaši objednávku!</h2>
+            <p>Dobrý den, <strong>${order.customer.name}</strong>,</p>
+            <p>Vaše objednávka č. <strong>#${order.id}</strong> byla úspěšně přijata. Brzy vás kontaktujeme ohledně doručení.</p>
+            <table style="width:100%;border-collapse:collapse;margin:24px 0">
+              <thead><tr style="background:#f5f5f5"><th style="padding:10px;text-align:left">Produkt</th><th style="padding:10px;text-align:center">Ks</th><th style="padding:10px;text-align:right">Cena</th></tr></thead>
+              <tbody>${itemsHtml}</tbody>
+            </table>
+            <div style="text-align:right;font-size:18px;color:#C4A96B;font-weight:bold">Celkem: ${order.total?.toLocaleString()} Kč</div>
+            <hr style="margin:24px 0;border:none;border-top:1px solid #eee"/>
+            <p style="color:#666;font-size:13px">Doručovací adresa: ${order.customer.address}, ${order.customer.zip} ${order.customer.city}</p>
+            <p style="color:#999;font-size:12px">V případě dotazů nás kontaktujte na <a href="mailto:eddigood2020@gmail.com">eddigood2020@gmail.com</a> nebo +420 732 995 210</p>
+          </div>
+          <div style="background:#f5f5f5;padding:16px;text-align:center;font-size:11px;color:#999">
+            © 2025–2026 Eco Italia · Eduard Korolov · Brno-Řečkovice
+          </div>
+        </div>
+      `
+    });
+  }
+
+  // Notifikace adminovi
+  await sendEmail({
+    to: ADMIN_EMAIL,
+    subject: `🛒 Nová objednávka #${order.id} — ${order.total?.toLocaleString()} Kč`,
+    html: `
+      <div style="font-family:sans-serif;max-width:560px;margin:0 auto">
+        <h2>Nová objednávka #${order.id}</h2>
+        <p><strong>Zákazník:</strong> ${order.customer?.name} (${order.customer?.email})<br/>
+        <strong>Telefon:</strong> ${order.customer?.phone || '—'}<br/>
+        <strong>Adresa:</strong> ${order.customer?.address}, ${order.customer?.zip} ${order.customer?.city}</p>
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr style="background:#f5f5f5"><th style="padding:8px;text-align:left">Produkt</th><th style="padding:8px;text-align:center">Ks</th><th style="padding:8px;text-align:right">Cena</th></tr></thead>
+          <tbody>${itemsHtml}</tbody>
+        </table>
+        <p style="font-size:18px;color:#C4A96B"><strong>Celkem: ${order.total?.toLocaleString()} Kč</strong></p>
+      </div>
+    `
+  });
+
   res.status(201).json(order);
 });
+
 app.get('/api/orders', (req, res) => res.json(orders.slice().reverse()));
 app.put('/api/orders/:id/status', (req, res) => {
   const o = orders.find(o => o.id === Number(req.params.id));
@@ -72,8 +146,21 @@ app.post('/api/auth/login', (req, res) => {
   else res.status(401).json({ error:'Nesprávné údaje' });
 });
 
-app.post('/api/consult', (req, res) => {
+app.post('/api/consult', async (req, res) => {
   console.log('Consult:', req.body);
+  await sendEmail({
+    to: ADMIN_EMAIL,
+    subject: `💬 Nová konzultace od ${req.body.name}`,
+    html: `
+      <div style="font-family:sans-serif;max-width:560px">
+        <h2>Nová žádost o konzultaci</h2>
+        <p><strong>Jméno:</strong> ${req.body.name}<br/>
+        <strong>Email:</strong> ${req.body.email}<br/>
+        <strong>Telefon:</strong> ${req.body.phone || '—'}</p>
+        <p><strong>Dotaz:</strong><br/>${req.body.message || '—'}</p>
+      </div>
+    `
+  });
   res.json({ ok:true });
 });
 

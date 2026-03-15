@@ -156,7 +156,7 @@ export default function Home() {
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, animation:'fadeIn .8s .3s both' }}>
             {[
               ['https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&q=80','Toskánský olej'],
-              ['https://images.unsplash.com/photo-1571069411715-0dd10f9f47ab?w=400&q=80','Lanýžová sůl'],
+              ['https://www.darkovec.cz/user/documents/upload/gallery/20200430_014305627_iOS.jpg','Lanýžová sůl'],
               ['https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&q=80','Tělový peeling'],
               ['https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&q=80','Bergamot'],
             ].map(([src,alt],i) => (

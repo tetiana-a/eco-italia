@@ -1,7 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-app.use(cors({ origin: '*' }));
+
+app.use(cors({
+  origin: '*',
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization'],
+}));
+app.options('*', cors());
 app.use(express.json());
 
 let products = [
@@ -64,6 +70,11 @@ app.post('/api/auth/login', (req, res) => {
   if (email === (process.env.ADMIN_EMAIL||'admin@eco-italia.cz') && password === (process.env.ADMIN_PASSWORD||'admin123'))
     res.json({ token:'eco-admin-token', ok:true });
   else res.status(401).json({ error:'Nesprávné údaje' });
+});
+
+app.post('/api/consult', (req, res) => {
+  console.log('Consult:', req.body);
+  res.json({ ok:true });
 });
 
 app.get('/api/health', (req,res) => res.json({ ok:true, products:products.length, orders:orders.length }));

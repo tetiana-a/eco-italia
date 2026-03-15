@@ -49,7 +49,8 @@ export default function About() {
 
       {/* DIRECTOR */}
       <section className="section">
-        <div className="container" style={{ display:'grid', gridTemplateColumns:'280px 1fr', gap:60, alignItems:'center' }}>
+        <div className="container">
+          <div className="director-grid">
           <div style={{ animation:'fadeIn .7s .1s both' }}>
             <div style={{
               width:280, height:320,
@@ -90,10 +91,9 @@ export default function About() {
               ))}
             </div>
           </div>
+          </div>{/* end director-grid */}
         </div>
       </section>
-
-      {/* STORY */}
       <section className="section" style={{ borderTop:'1px solid var(--border)', paddingTop:64 }}>
         <div className="container" style={{ maxWidth:760 }}>
           <div style={{ textAlign:'center', marginBottom:44 }}>
@@ -119,7 +119,7 @@ export default function About() {
             <h2 className="sec-title">Naše hodnoty</h2>
             <p className="sec-sub">Co nás odlišuje od ostatních</p>
           </div>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16 }}>
+          <div className="four-col">
             {VALUES.map((v,i) => (
               <div key={i} style={{
                 padding:'24px 20px', background:'var(--surface)', border:'1px solid var(--border)',
@@ -159,7 +159,8 @@ export default function About() {
 
       {/* CONSULTATION FORM */}
       <section className="section" id="konzultace" style={{ borderTop:'1px solid var(--border)' }}>
-        <div className="container" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:72, alignItems:'start' }}>
+        <div className="container">
+          <div className="two-col" style={{ alignItems:'start' }}>
           <div>
             <span className="chip" style={{ marginBottom:18 }}>Bezplatná konzultace</span>
             <h2 style={{ fontSize:'clamp(28px,3.5vw,46px)', marginBottom:16, lineHeight:1.1 }}>
@@ -214,6 +215,7 @@ export default function About() {
               </form>
             )}
           </div>
+          </div>{/* end two-col */}
         </div>
       </section>
 

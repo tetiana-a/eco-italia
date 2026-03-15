@@ -28,7 +28,7 @@ export default function Home() {
       {/* ── HERO: compact, editorial ── */}
       <section style={{ minHeight:'90vh', display:'flex', flexDirection:'column', justifyContent:'center', paddingTop:80, paddingBottom:48 }}>
         <div className="container">
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:60, alignItems:'center' }}>
+          <div className="hero-grid">
 
             {/* Left: text */}
             <div style={{ animation:'fadeUp .8s .1s both' }}>
@@ -63,7 +63,7 @@ export default function Home() {
             </div>
 
             {/* Right: editorial image collage */}
-            <div style={{ position:'relative', height:480, animation:'fadeIn .9s .3s both' }}>
+            <div className="hero-img-col" style={{ position:'relative', height:480, animation:'fadeIn .9s .3s both' }}>
               <img
                 src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=500&q=85"
                 alt="Italian olive oil"
@@ -138,7 +138,8 @@ export default function Home() {
 
       {/* ── MANIFESTO: minimal, text-heavy ── */}
       <section className="section" style={{ borderTop:'1px solid var(--border)' }}>
-        <div className="container" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:72, alignItems:'center' }}>
+        <div className="container" style={{ }}>
+          <div className="two-col">
           <div style={{ animation:'fadeUp .7s .1s both' }}>
             <span className="chip" style={{ marginBottom:18 }}>Naše filozofie</span>
             <h2 style={{ fontSize:'clamp(28px,3.5vw,46px)', marginBottom:18, lineHeight:1.1 }}>
@@ -166,6 +167,7 @@ export default function Home() {
               />
             ))}
           </div>
+          </div>{/* end two-col */}
         </div>
       </section>
     </div>

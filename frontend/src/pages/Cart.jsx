@@ -18,7 +18,7 @@ export default function Cart() {
     <div className="page-wrap" style={{ paddingTop:100, paddingBottom:88 }}>
       <div className="container">
         <h1 style={{ fontFamily:'Cormorant Garamond,serif', fontSize:44, fontWeight:400, marginBottom:44 }}>Košík</h1>
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 360px', gap:40, alignItems:'start' }}>
+        <div className="cart-grid">
           <div>
             {cart.map(item => (
               <div key={item.id} style={{ display:'flex', alignItems:'center', gap:18, padding:'18px 0', borderBottom:'1px solid var(--border)' }}>

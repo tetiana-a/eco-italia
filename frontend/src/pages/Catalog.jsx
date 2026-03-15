@@ -33,7 +33,7 @@ export default function Catalog() {
 
       <div className="container" style={{ padding:'36px 24px 88px' }}>
         {/* Filters */}
-        <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:14, marginBottom:36, paddingBottom:24, borderBottom:'1px solid var(--border)' }}>
+        <div className="catalog-filters" style={{ marginBottom:36, paddingBottom:24, borderBottom:'1px solid var(--border)' }}>
           <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
             {CATS.map(([id,label]) => (
               <button key={id} onClick={() => setCat(id)}

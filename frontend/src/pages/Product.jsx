@@ -41,7 +41,7 @@ export default function Product() {
           <span>{product.nameCs}</span>
         </div>
 
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:60, marginBottom:80, alignItems:'start' }}>
+        <div className="product-grid" style={{ marginBottom:80 }}>
           <div style={{ animation:'fadeUp .6s both' }}>
             <img src={product.image} alt={product.nameCs} style={{ width:'100%', aspectRatio:'1', objectFit:'cover', borderRadius:12 }} />
           </div>

@@ -38,10 +38,10 @@ export default function Checkout() {
     <div className="page-wrap" style={{ paddingTop:100, paddingBottom:88 }}>
       <div className="container">
         <h1 style={{ fontFamily:'Cormorant Garamond,serif', fontSize:44, fontWeight:400, marginBottom:44 }}>Pokladna</h1>
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 380px', gap:48, alignItems:'start' }}>
+        <div className="checkout-grid">
           <form onSubmit={submit}>
             <h3 style={{ fontFamily:'Cormorant Garamond,serif', fontSize:24, fontWeight:400, marginBottom:20 }}>Kontaktní údaje</h3>
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:14 }}>
+            <div className="form-2col" style={{ marginBottom:14 }}>
               {[['name','Jméno a příjmení','text'],['email','Email','email']].map(([k,l,t]) => (
                 <div key={k}>
                   <label style={{ display:'block', fontSize:11, fontWeight:600, color:'var(--muted)', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:6 }}>{l} *</label>
@@ -58,7 +58,7 @@ export default function Checkout() {
               <label style={{ display:'block', fontSize:11, fontWeight:600, color:'var(--muted)', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:6 }}>Ulice *</label>
               <input className="input" value={form.address} onChange={e=>set('address',e.target.value)} required />
             </div>
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }}>
+            <div className="form-2col">
               {[['city','Město'],['zip','PSČ']].map(([k,l]) => (
                 <div key={k}>
                   <label style={{ display:'block', fontSize:11, fontWeight:600, color:'var(--muted)', textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:6 }}>{l} *</label>

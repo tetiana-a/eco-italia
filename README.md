@@ -1,14 +1,14 @@
-# 🧠 MindPocket — AI Mental Health Assistant
+# 🇮🇹 Eco Italia — Premium Italian Olive Oil Store
 
-Production-ready AI mental wellness platform built with **Next.js, React, OpenAI API, TypeScript, Prisma, Supabase and AI-powered conversations.**
+Modern full-stack e-commerce platform for authentic Italian olive oil.
 
-MindPocket helps users improve emotional wellbeing through AI conversations, mood tracking, guided breathing exercises and personal journaling.
+Built with modern web technologies featuring an online product catalog, shopping experience, contact forms and email notifications.
 
 ---
 
 # 🚀 Live Demo
 
-🌐 https://mind-pocket-pi.vercel.app
+🌐 https://shopecoitaly.housefixbrno.cz/
 
 Portfolio
 
@@ -18,123 +18,102 @@ https://tetiana-a.github.io/aiAutomationDev/
 
 # ✨ Features
 
-- 🤖 AI Mental Health Assistant
-- 💬 AI Chat powered by OpenAI
-- 📖 Personal Journal
-- 😊 Mood Tracker
-- 🌬 Guided Breathing Exercises
-- 🚨 Crisis Support Section
-- 📊 Progress Dashboard
-- 🔐 Authentication
-- 🌙 Modern Responsive UI
-- ⚡ Fast Next.js Application
+- 🛒 Online Store
+- 🇮🇹 Premium Italian Olive Oil Catalog
+- 📱 Responsive Design
+- 📧 Contact Form
+- 📦 Product Pages
+- 🔍 Product Search
+- ⚡ Fast Frontend
+- 📩 Email Notifications (Resend)
+- 🛠 Admin-ready Architecture
 
 ---
 
 # 🏗 Architecture
 
 ```text
-                 User
-                   │
-                   ▼
-            Next.js Frontend
-                   │
-                   ▼
-             React Components
-                   │
-                   ▼
-             API Routes
-                   │
-     ┌─────────────┼─────────────┐
-     ▼             ▼             ▼
- OpenAI API     Supabase      Prisma
-                   │
-                   ▼
-             User Database
-                   │
-                   ▼
-      AI Chat • Journal • Mood Tracker
+            Customer
+                │
+                ▼
+          React Frontend
+                │
+                ▼
+          Express Backend
+                │
+        ┌───────┴────────┐
+        ▼                ▼
+ Product Data      Contact Form
+        │                │
+        ▼                ▼
+      Resend Email Notifications
 ```
 
 ---
 
 # 🛠 Tech Stack
 
-- Next.js
 - React
-- TypeScript
-- OpenAI API
-- Prisma ORM
-- Supabase
-- PostgreSQL
-- Tailwind CSS
+- JavaScript
+- Node.js
+- Express
+- HTML
+- CSS
 - REST API
-- AI Agents
+- Resend Email API
 
 ---
 
 # 💼 Business Value
 
-MindPocket demonstrates how Large Language Models can power modern digital wellness applications.
+Eco Italia demonstrates a production-ready online store for premium products.
 
-Possible use cases:
+Business capabilities include:
 
-- AI Mental Health Assistant
-- Emotional Support Platform
-- AI Journaling
-- Mood Analytics
-- Wellness SaaS
-- Personal Productivity Assistant
+- Product catalog
+- Online customer inquiries
+- Responsive shopping experience
+- Email automation
+- Brand presentation
+- Small business digitalization
 
 ---
 
-# ⚙️ Core Modules
+# ⚙️ Main Modules
 
-🧠 AI Chat
+🛒 Product Catalog
 
-😊 Mood Tracking
+📦 Product Details
 
-📖 Journal
+📧 Contact Form
 
-🌬 Breathing Exercises
+📱 Responsive UI
 
-🚨 Crisis Support
-
-👤 User Profile
-
-📊 Dashboard
+⚡ Email Notifications
 
 ---
 
 # 📂 Repository Structure
 
 ```text
-app/
-components/
-prisma/
-public/
-db/
+backend/
+frontend/
 README.md
-package.json
 ```
 
 ---
 
 # 📸 Screenshots
 
-### AI Chat
+### Homepage
 
 (Add screenshot)
 
-### Mood Tracker
+### Product Catalog
 
 (Add screenshot)
 
-### Dashboard
-
-(Add screenshot)
-
-### Journal
+### Contact Page
 
 (Add screenshot)
 
@@ -144,19 +123,17 @@ package.json
 
 ## Tetiana Kotolup
 
-AI Automation Engineer
+AI Automation Engineer & Full-Stack Developer
 
 Specializing in:
 
-- AI Agents
+- AI Automation
+- Full-Stack Development
+- React
+- Node.js
 - OpenAI API
-- Next.js
-- TypeScript
-- RAG
-- PostgreSQL
-- Supabase
 - Workflow Automation
-- Full-Stack AI Systems
+- Web Applications
 
 ---
 
@@ -180,13 +157,12 @@ https://github.com/tetiana-a
 
 # ⭐ Open to Opportunities
 
-Currently available for:
+Available for:
 
+- Full-Stack Developer
 - AI Automation Engineer
 - AI Engineer
-- LLM Engineer
 - AI Solutions Engineer
-- Full-Stack AI Developer
 
 ---
 

@@ -219,6 +219,17 @@ export default function About() {
         </div>
       </section>
 
+      {/* WEB & DIGITAL MARKETING CREDIT */}
+      <section style={{ padding:'28px 0', borderTop:'1px solid var(--border)' }}>
+        <div className="container" style={{ textAlign:'center' }}>
+          <p style={{ fontSize:11, color:'var(--muted2)', fontWeight:300, letterSpacing:'0.02em' }}>
+            Web & digitální marketing:{' '}
+            <a href="https://tetianakotolup.com" target="_blank" rel="noopener noreferrer"
+              style={{ color:'var(--gold)', fontWeight:500 }}>Tetiana Kotolup</a>
+          </p>
+        </div>
+      </section>
+
     </div>
   );
 }

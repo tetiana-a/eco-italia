@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -8,7 +9,27 @@ app.use(cors({
   allowedHeaders: ['Content-Type','Authorization'],
 }));
 app.options('*', cors());
-app.use(express.json());
+app.use(express.json({ limit: '100kb' }));
+
+const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+
+// ── ADMIN AUTH ──
+// shortcut: sessions live in memory, so admins log in again after a restart; move to signed JWT if you run several instances.
+const ADMIN_LOGIN = process.env.ADMIN_EMAIL || 'admin@eco-italia.cz';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const SESSION_MS = 12 * 60 * 60 * 1000;
+const sessions = new Map();
+const sameText = (a, b) => {
+  const ha = crypto.createHash('sha256').update(String(a)).digest();
+  const hb = crypto.createHash('sha256').update(String(b)).digest();
+  return crypto.timingSafeEqual(ha, hb);
+};
+function requireAdmin(req, res, next) {
+  const token = (req.headers.authorization || '').replace(/^Bearer /, '');
+  const exp = sessions.get(token);
+  if (!token || !exp || exp < Date.now()) { sessions.delete(token); return res.status(401).json({ error: 'Unauthorized' }); }
+  next();
+}
 
 // ── EMAIL via Resend ──
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
@@ -66,17 +87,42 @@ app.get('/api/products/:id', (req, res) => {
   const p = products.find(p => p.id === req.params.id);
   p ? res.json(p) : res.status(404).json({ error:'Not found' });
 });
-app.post('/api/products', (req, res) => { const p = { ...req.body, id: Date.now().toString() }; products.push(p); res.status(201).json(p); });
-app.put('/api/products/:id', (req, res) => { const i = products.findIndex(p => p.id === req.params.id); if(i===-1) return res.status(404).json({}); products[i] = { ...products[i], ...req.body }; res.json(products[i]); });
-app.delete('/api/products/:id', (req, res) => { products = products.filter(p => p.id !== req.params.id); res.json({ ok:true }); });
+app.post('/api/products', requireAdmin, (req, res) => { const p = { ...req.body, id: Date.now().toString() }; products.push(p); res.status(201).json(p); });
+app.put('/api/products/:id', requireAdmin, (req, res) => { const i = products.findIndex(p => p.id === req.params.id); if(i===-1) return res.status(404).json({}); products[i] = { ...products[i], ...req.body }; res.json(products[i]); });
+app.delete('/api/products/:id', requireAdmin, (req, res) => { products = products.filter(p => p.id !== req.params.id); res.json({ ok:true }); });
+
+const CUSTOMER_FIELDS = ['name', 'email', 'phone', 'address', 'city', 'zip'];
+
+// Prices and totals come from the server catalogue, never from the browser.
+function buildOrder(body) {
+  const c = body?.customer || {};
+  for (const k of ['name', 'email', 'address', 'city', 'zip']) {
+    if (typeof c[k] !== 'string' || !c[k].trim() || c[k].length > 200) return { error: `Invalid customer.${k}` };
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.email)) return { error: 'Invalid customer.email' };
+  if (!Array.isArray(body.items) || body.items.length === 0 || body.items.length > 50) return { error: 'Invalid items' };
+  const items = [];
+  for (const it of body.items) {
+    const p = products.find(p => p.id === String(it?.id));
+    const qty = Number(it?.qty);
+    if (!p || !Number.isInteger(qty) || qty < 1 || qty > 99) return { error: 'Invalid item' };
+    items.push({ id: p.id, name: p.nameCs, price: p.price, qty });
+  }
+  const customer = Object.fromEntries(CUSTOMER_FIELDS.map(k => [k, String(c[k] ?? '').trim().slice(0, 200)]));
+  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+  return { order: { items, customer, total } };
+}
 
 app.post('/api/orders', async (req, res) => {
-  const order = { ...req.body, id: nextId++, status:'pending', createdAt: new Date().toISOString() };
+  const { order: built, error } = buildOrder(req.body);
+  if (error) return res.status(400).json({ error });
+  // shortcut: orders are kept in memory and vanish on restart; store them in a database before real sales.
+  const order = { ...built, id: nextId++, status:'pending', createdAt: new Date().toISOString() };
   orders.push(order);
-  console.log('Order:', order.customer?.name, order.total+'Kč');
+  console.log('Order:', order.id, order.total+'Kč');
 
-  const itemsHtml = (order.items||[]).map(i =>
-    `<tr><td style="padding:8px;border-bottom:1px solid #eee">${i.name}</td><td style="padding:8px;border-bottom:1px solid #eee;text-align:center">×${i.qty}</td><td style="padding:8px;border-bottom:1px solid #eee;text-align:right">${(i.price*i.qty).toLocaleString()} Kč</td></tr>`
+  const itemsHtml = order.items.map(i =>
+    `<tr><td style="padding:8px;border-bottom:1px solid #eee">${esc(i.name)}</td><td style="padding:8px;border-bottom:1px solid #eee;text-align:center">×${i.qty}</td><td style="padding:8px;border-bottom:1px solid #eee;text-align:right">${(i.price*i.qty).toLocaleString()} Kč</td></tr>`
   ).join('');
 
   // Email zákazníkovi
@@ -99,7 +145,7 @@ app.post('/api/orders', async (req, res) => {
             </table>
             <div style="text-align:right;font-size:18px;color:#C4A96B;font-weight:bold">Celkem: ${order.total?.toLocaleString()} Kč</div>
             <hr style="margin:24px 0;border:none;border-top:1px solid #eee"/>
-            <p style="color:#666;font-size:13px">Doručovací adresa: ${order.customer.address}, ${order.customer.zip} ${order.customer.city}</p>
+            <p style="color:#666;font-size:13px">Doručovací adresa: ${esc(order.customer.address)}, ${esc(order.customer.zip)} ${esc(order.customer.city)}</p>
             <p style="color:#999;font-size:12px">V případě dotazů nás kontaktujte na <a href="mailto:eddigood2020@gmail.com">eddigood2020@gmail.com</a> nebo +420 732 995 210</p>
           </div>
           <div style="background:#f5f5f5;padding:16px;text-align:center;font-size:11px;color:#999">
@@ -117,9 +163,9 @@ app.post('/api/orders', async (req, res) => {
     html: `
       <div style="font-family:sans-serif;max-width:560px;margin:0 auto">
         <h2>Nová objednávka #${order.id}</h2>
-        <p><strong>Zákazník:</strong> ${order.customer?.name} (${order.customer?.email})<br/>
-        <strong>Telefon:</strong> ${order.customer?.phone || '—'}<br/>
-        <strong>Adresa:</strong> ${order.customer?.address}, ${order.customer?.zip} ${order.customer?.city}</p>
+        <p><strong>Zákazník:</strong> ${esc(order.customer.name)} (${esc(order.customer.email)})<br/>
+        <strong>Telefon:</strong> ${esc(order.customer.phone) || '—'}<br/>
+        <strong>Adresa:</strong> ${esc(order.customer.address)}, ${esc(order.customer.zip)} ${esc(order.customer.city)}</p>
         <table style="width:100%;border-collapse:collapse">
           <thead><tr style="background:#f5f5f5"><th style="padding:8px;text-align:left">Produkt</th><th style="padding:8px;text-align:center">Ks</th><th style="padding:8px;text-align:right">Cena</th></tr></thead>
           <tbody>${itemsHtml}</tbody>
@@ -132,32 +178,38 @@ app.post('/api/orders', async (req, res) => {
   res.status(201).json(order);
 });
 
-app.get('/api/orders', (req, res) => res.json(orders.slice().reverse()));
-app.put('/api/orders/:id/status', (req, res) => {
+const ORDER_STATUSES = ['pending', 'shipped', 'delivered', 'cancelled'];
+
+app.get('/api/orders', requireAdmin, (req, res) => res.json(orders.slice().reverse()));
+app.put('/api/orders/:id/status', requireAdmin, (req, res) => {
   const o = orders.find(o => o.id === Number(req.params.id));
   if(!o) return res.status(404).json({});
+  if (!ORDER_STATUSES.includes(req.body?.status)) return res.status(400).json({ error: 'Invalid status' });
   o.status = req.body.status; res.json(o);
 });
 
 app.post('/api/auth/login', (req, res) => {
-  const { email, password } = req.body;
-  if (email === (process.env.ADMIN_EMAIL||'admin@eco-italia.cz') && password === (process.env.ADMIN_PASSWORD||'admin123'))
-    res.json({ token:'eco-admin-token', ok:true });
-  else res.status(401).json({ error:'Nesprávné údaje' });
+  if (!ADMIN_PASSWORD) return res.status(503).json({ error:'Admin login is disabled: set ADMIN_PASSWORD' });
+  const { email, password } = req.body || {};
+  if (!sameText(email || '', ADMIN_LOGIN) || !sameText(password || '', ADMIN_PASSWORD))
+    return res.status(401).json({ error:'Nesprávné údaje' });
+  const token = crypto.randomBytes(32).toString('hex');
+  sessions.set(token, Date.now() + SESSION_MS);
+  res.json({ token, ok:true });
 });
 
 app.post('/api/consult', async (req, res) => {
-  console.log('Consult:', req.body);
+  console.log('Consult from:', String(req.body?.email ?? '').slice(0, 100));
   await sendEmail({
     to: ADMIN_EMAIL,
-    subject: `💬 Nová konzultace od ${req.body.name}`,
+    subject: `💬 Nová konzultace od ${String(req.body?.name ?? '').slice(0, 100)}`,
     html: `
       <div style="font-family:sans-serif;max-width:560px">
         <h2>Nová žádost o konzultaci</h2>
-        <p><strong>Jméno:</strong> ${req.body.name}<br/>
-        <strong>Email:</strong> ${req.body.email}<br/>
-        <strong>Telefon:</strong> ${req.body.phone || '—'}</p>
-        <p><strong>Dotaz:</strong><br/>${req.body.message || '—'}</p>
+        <p><strong>Jméno:</strong> ${esc(req.body?.name)}<br/>
+        <strong>Email:</strong> ${esc(req.body?.email)}<br/>
+        <strong>Telefon:</strong> ${esc(req.body?.phone) || '—'}</p>
+        <p><strong>Dotaz:</strong><br/>${esc(req.body?.message) || '—'}</p>
       </div>
     `
   });
@@ -167,4 +219,5 @@ app.post('/api/consult', async (req, res) => {
 app.get('/api/health', (req,res) => res.json({ ok:true, products:products.length, orders:orders.length }));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`✅ Eco Italia — http://localhost:${PORT} · ${products.length} produktů`));
+if (require.main === module) app.listen(PORT, () => console.log(`✅ Eco Italia — http://localhost:${PORT} · ${products.length} produktů`));
+module.exports = app;

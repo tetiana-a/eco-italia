@@ -15,10 +15,11 @@ export default function Checkout() {
   const submit = async (e) => {
     e.preventDefault(); setLoading(true);
     try {
-      await fetch(`${API}/orders`, {
+      const r = await fetch(`${API}/orders`, {
         method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ items: cart.map(i=>({id:i.id,name:i.nameCs,price:i.price,qty:i.qty})), customer:form, total })
+        body: JSON.stringify({ items: cart.map(i=>({id:i.id,qty:i.qty})), customer:form })
       });
+      if (!r.ok) throw new Error(`Order failed: ${r.status}`);
       dispatch({ type:'CLEAR' });
       setDone(true);
     } catch(e) { alert('Chyba. Zkuste to znovu.'); }

@@ -30,14 +30,14 @@ export function AdminLayout() {
 }
 
 export function AdminDashboard() {
-  const { token } = useAuth();
+  const { authFetch } = useAuth();
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch(`${API}/orders`, { headers:{'Authorization':`Bearer ${token}`} }).then(r=>r.json()).then(d=>Array.isArray(d)&&setOrders(d)).catch(()=>{});
+    authFetch(`${API}/orders`).then(r=>r.json()).then(d=>Array.isArray(d)&&setOrders(d)).catch(()=>{});
     fetch(`${API}/products`).then(r=>r.json()).then(d=>Array.isArray(d)&&setProducts(d)).catch(()=>{});
-  }, [token]);
+  }, []);
 
   const stats = [
     { l:'Objednávek', v: orders.length },
@@ -78,7 +78,7 @@ export function AdminDashboard() {
 }
 
 export function AdminProducts() {
-  const { token } = useAuth();
+  const { authFetch } = useAuth();
   const [products, setProducts] = useState([]);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ name:'', nameCs:'', price:'', category:'oils', image:'', origin:'Italy', eco:5, desc:'', featured:false });
@@ -89,11 +89,11 @@ export function AdminProducts() {
   const set = (k,v) => setForm(f=>({...f,[k]:v}));
   const save = async () => {
     const body = { ...form, price:Number(form.price), eco:Number(form.eco) };
-    if (editing && editing!=='new') await fetch(`${API}/products/${editing}`,{method:'PUT',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify(body)});
-    else await fetch(`${API}/products`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify(body)});
+    if (editing && editing!=='new') await authFetch(`${API}/products/${editing}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    else await authFetch(`${API}/products`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     setEditing(null); load();
   };
-  const del = async (id) => { if(window.confirm('Smazat?')){ await fetch(`${API}/products/${id}`,{method:'DELETE',headers:{'Authorization':`Bearer ${token}`}}); load(); } };
+  const del = async (id) => { if(window.confirm('Smazat?')){ await authFetch(`${API}/products/${id}`,{method:'DELETE'}); load(); } };
   const edit = p => { setEditing(p.id); setForm({...p, price:String(p.price), eco:String(p.eco), image:p.image||''}); };
 
   return (
@@ -166,14 +166,14 @@ export function AdminProducts() {
 }
 
 export function AdminOrders() {
-  const { token } = useAuth();
+  const { authFetch } = useAuth();
   const [orders, setOrders] = useState([]);
 
-  const load = () => fetch(`${API}/orders`,{headers:{'Authorization':`Bearer ${token}`}}).then(r=>r.json()).then(d=>Array.isArray(d)&&setOrders(d)).catch(()=>{});
+  const load = () => authFetch(`${API}/orders`).then(r=>r.json()).then(d=>Array.isArray(d)&&setOrders(d)).catch(()=>{});
   useEffect(()=>{load();},[]);
 
   const changeStatus = async (id, status) => {
-    await fetch(`${API}/orders/${id}/status`,{method:'PUT',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify({status})});
+    await authFetch(`${API}/orders/${id}/status`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
     load();
   };
 

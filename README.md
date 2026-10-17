@@ -66,7 +66,13 @@ https://tetiana-a.github.io/aiAutomationDev/
 
 # 💼 Business Value
 
-Eco Italia demonstrates a production-ready online store for premium products.
+Eco Italia is a working online-store demo for premium Italian products.
+
+**Security and limits (current version):**
+- Admin API (products, orders, order status) requires login; set `ADMIN_EMAIL` and `ADMIN_PASSWORD` on the server. Without `ADMIN_PASSWORD` admin login is disabled.
+- Order prices and totals are calculated on the server from the catalogue.
+- Orders and admin sessions are stored in memory and are lost on restart. A database is needed before taking real orders.
+- Backend check: `cd backend && npm test`.
 
 Business capabilities include:
 

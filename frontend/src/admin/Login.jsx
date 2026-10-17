@@ -14,9 +14,9 @@ export default function Login() {
   const submit = async (e) => {
     e.preventDefault();
     const r = await fetch(`${API}/auth/login`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email,password:pwd}) });
-    const d = await r.json();
+    const d = await r.json().catch(() => ({}));
     if (d.token) { login(d.token); nav('/admin'); }
-    else setErr('Nesprávné přihlašovací údaje');
+    else setErr(r.status === 503 ? 'Přihlášení není nastaveno (ADMIN_PASSWORD)' : 'Nesprávné přihlašovací údaje');
   };
 
   return (
@@ -31,7 +31,6 @@ export default function Login() {
           {err && <p style={{ color:'var(--red)', fontSize:13 }}>{err}</p>}
           <button className="btn-gold" type="submit">Přihlásit se</button>
         </form>
-        <p style={{ fontSize:11, color:'var(--muted2)', marginTop:20 }}>admin@eco-italia.cz / admin123</p>
       </div>
     </div>
   );

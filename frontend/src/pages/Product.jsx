@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
 import ProductCard from '../components/ProductCard';
 
 const API = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
@@ -8,27 +7,18 @@ const CATS = { oils:'Oleje', cosmetics:'Kosmetika', food:'Potraviny', home:'Dom�
 
 export default function Product() {
   const { id } = useParams();
-  const { dispatch } = useCart();
   const [product, setProduct] = useState(null);
   const [related, setRelated] = useState([]);
-  const [qty, setQty] = useState(1);
-  const [added, setAdded] = useState(false);
 
   useEffect(() => {
     fetch(`${API}/products/${id}`).then(r=>r.json()).then(p => {
       setProduct(p);
       fetch(`${API}/products?category=${p.category}`).then(r=>r.json()).then(r=>setRelated(r.filter(x=>x.id!==id).slice(0,3)));
     });
-    setQty(1); setAdded(false);
     window.scrollTo(0,0);
   }, [id]);
 
   if (!product) return <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center' }}><div style={{ width:36, height:36, border:'2px solid var(--border)', borderTopColor:'var(--gold)', borderRadius:'50%', animation:'spin .8s linear infinite' }}/><style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style></div>;
-
-  const handleAdd = () => {
-    for (let i=0;i<qty;i++) dispatch({ type:'ADD', item:product });
-    setAdded(true); setTimeout(()=>setAdded(false), 2000);
-  };
 
   return (
     <div className="page-wrap" style={{ paddingTop:100, paddingBottom:88 }}>
@@ -53,16 +43,9 @@ export default function Product() {
             <p style={{ fontSize:13, color:'var(--muted)', fontStyle:'italic', marginBottom:20 }}>{product.name}</p>
             <div style={{ fontFamily:'Cormorant Garamond,serif', fontSize:36, color:'var(--gold)', marginBottom:24 }}>{product.price} Kč</div>
             <p style={{ fontSize:15, color:'var(--muted)', lineHeight:1.8, fontWeight:300, marginBottom:24 }}>{product.desc}</p>
-            <div style={{ display:'flex', gap:12, alignItems:'center', marginBottom:32 }}>
-              <div style={{ display:'flex', alignItems:'center', gap:14, background:'var(--glass)', border:'1px solid var(--border)', borderRadius:50, padding:'8px 16px' }}>
-                <button onClick={()=>setQty(q=>Math.max(1,q-1))} style={{ background:'none', color:'var(--gold)', fontSize:18, fontWeight:300 }}>−</button>
-                <span style={{ fontSize:16, minWidth:20, textAlign:'center' }}>{qty}</span>
-                <button onClick={()=>setQty(q=>q+1)} style={{ background:'none', color:'var(--gold)', fontSize:18, fontWeight:300 }}>+</button>
-              </div>
-              <button className={added ? 'btn-outline' : 'btn-gold'} onClick={handleAdd} style={{ flex:1 }}>
-                {added ? 'Přidáno do košíku' : 'Přidat do košíku'}
-              </button>
-            </div>
+            <p style={{ fontSize:13, color:'var(--muted)', border:'1px solid var(--border)', borderRadius:8, padding:'12px 16px', marginBottom:32 }}>
+              Ukázkový produkt — výukový projekt. Zboží nelze objednat ani koupit.
+            </p>
             <div style={{ borderTop:'1px solid var(--border)', paddingTop:24, display:'flex', flexDirection:'column', gap:10 }}>
               {[['Původ', product.origin],['Kategorie', CATS[product.category]],['Eco Score', '★'.repeat(product.eco)]].map(([k,v]) => (
                 <div key={k} style={{ fontSize:14, color:'var(--muted)' }}><strong style={{ color:'var(--text)', marginRight:8 }}>{k}:</strong>{v}</div>

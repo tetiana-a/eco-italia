@@ -43,7 +43,7 @@ export default function Home() {
               <div style={{ width:40, height:1, background:'linear-gradient(90deg,var(--gold),transparent)', marginBottom:20 }} />
 
               <p style={{ fontSize:14, color:'var(--muted)', fontWeight:300, maxWidth:380, lineHeight:1.85, marginBottom:32 }}>
-                Prémiové ekologické produkty z nejlepších italských regionů. Certifikované, udržitelné, doručené přímo k vám.
+                Ukázkový katalog italských produktů — výukový a portfoliový projekt. Zboží nelze objednat ani koupit.
               </p>
 
               <div style={{ display:'flex', gap:10, marginBottom:48 }}>
@@ -53,7 +53,7 @@ export default function Home() {
 
               {/* Stats row */}
               <div style={{ display:'flex', gap:0, borderTop:'1px solid var(--border)', paddingTop:24 }}>
-                {[['8', 'regionů Itálie'],['100%','bio certifikace'],['48h','doručení do ČR']].map(([v,l],i) => (
+                {[['8', 'regionů Itálie'],['18','ukázkových produktů'],['Demo','výukový projekt']].map(([v,l],i) => (
                   <div key={l} style={{ flex:1, paddingRight:i<2?24:0, borderRight:i<2?'1px solid var(--border)':'none', paddingLeft:i>0?24:0 }}>
                     <div style={{ fontFamily:'Cormorant Garamond,serif', fontSize:26, color:'var(--gold)', lineHeight:1 }}>{v}</div>
                     <div style={{ fontSize:10, color:'var(--muted)', letterSpacing:'0.1em', textTransform:'uppercase', marginTop:5 }}>{l}</div>
@@ -81,8 +81,8 @@ export default function Home() {
                 border:'1px solid var(--border)', borderRadius:8, padding:'10px 16px',
                 animation:'fadeUp .7s .7s both', opacity:0,
               }}>
-                <div style={{ fontSize:9, color:'var(--eco2)', letterSpacing:'0.12em', textTransform:'uppercase', marginBottom:2 }}>Ekologická certifikace</div>
-                <div style={{ fontFamily:'Cormorant Garamond,serif', fontSize:15 }}>EU Organic ✓</div>
+                <div style={{ fontSize:9, color:'var(--eco2)', letterSpacing:'0.12em', textTransform:'uppercase', marginBottom:2 }}>Výukový projekt</div>
+                <div style={{ fontFamily:'Cormorant Garamond,serif', fontSize:15 }}>Ukázkový e-shop</div>
               </div>
             </div>
           </div>
@@ -146,7 +146,7 @@ export default function Home() {
               Příroda a <em style={{ fontStyle:'italic', color:'var(--gold)' }}>luxus</em><br/>v harmonii
             </h2>
             <p style={{ color:'var(--muted)', fontSize:14, fontWeight:300, lineHeight:1.85, marginBottom:14 }}>
-              Každý produkt pochází přímo od malých italských výrobců, kteří respektují přírodu a tradici. Vybíráme pouze to nejlepší — s certifikátem ekologického zemědělství EU.
+              Tento web je ukázkový e-shop vytvořený jako výukový projekt webového vývoje. Produkty, ceny a popisy jsou pouze ilustrativní.
             </p>
             <p style={{ color:'var(--muted)', fontSize:14, fontWeight:300, lineHeight:1.85, marginBottom:28 }}>
               Věříme, že prémiová kvalita a udržitelnost nejsou v rozporu — jsou nerozlučné.
@@ -156,7 +156,7 @@ export default function Home() {
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, animation:'fadeIn .8s .3s both' }}>
             {[
               ['https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400&q=80','Toskánský olej'],
-              ['https://www.darkovec.cz/user/documents/upload/gallery/20200430_014305627_iOS.jpg','Lanýžová sůl'],
+              ['https://images.unsplash.com/photo-1571069411715-0dd10f9f47ab?w=400&q=80','Lanýžová sůl'],
               ['https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&q=80','Tělový peeling'],
               ['https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&q=80','Bergamot'],
             ].map(([src,alt],i) => (

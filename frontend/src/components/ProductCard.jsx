@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
 
 const CATS = { oils:'Oleje', cosmetics:'Kosmetika', food:'Potraviny', home:'Domácnost', wellness:'Wellness' };
 
 export default function ProductCard({ product, delay = 0 }) {
-  const { dispatch } = useCart();
   return (
     <div className="pcard" style={{ animationDelay: `${delay}ms` }}>
       <Link to={`/produkt/${product.id}`} className="pcard-img">
@@ -18,7 +16,6 @@ export default function ProductCard({ product, delay = 0 }) {
         <p className="pcard-origin">{product.origin}</p>
         <div className="pcard-foot">
           <span className="pcard-price">{product.price} Kč</span>
-          <button className="pcard-add" onClick={() => dispatch({ type:'ADD', item:product })}>Přidat</button>
         </div>
       </div>
     </div>

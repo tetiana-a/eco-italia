@@ -1,8 +1,10 @@
-# 🇮🇹 Eco Italia — Premium Italian Olive Oil Store
+# 🇮🇹 Eco Italia — Demo E-commerce Project
 
-Modern full-stack e-commerce platform for authentic Italian olive oil.
+> **Ukázkový (výukový) projekt — nejedná se o skutečný e-shop.** Zboží nelze objednat ani koupit; produkty a ceny jsou pouze ilustrativní. Viz [DEMO.md](DEMO.md).
+>
+> **Educational / portfolio project — not a real shop.** Nothing can be ordered or bought; products and prices are illustrative only.
 
-Built with modern web technologies featuring an online product catalog, shopping experience, contact forms and email notifications.
+Full-stack demo of a product catalog for Italian products, built to practice React and Node.js.
 
 ---
 
@@ -10,86 +12,35 @@ Built with modern web technologies featuring an online product catalog, shopping
 
 🌐 https://shopecoitaly.housefixbrno.cz/
 
-Portfolio
-
-https://tetiana-a.github.io/aiAutomationDev/
+Portfolio: https://tetiana-a.github.io/aiAutomationDev/
 
 ---
 
 # ✨ Features
 
-- 🛒 Online Store
-- 🇮🇹 Premium Italian Olive Oil Catalog
-- 📱 Responsive Design
-- 📧 Contact Form
-- 📦 Product Pages
-- 🔍 Product Search
-- ⚡ Fast Frontend
-- 📩 Email Notifications (Resend)
-- 🛠 Admin-ready Architecture
+- 🇮🇹 Product catalog with categories, search and sorting (demo data)
+- 📦 Product detail pages
+- 📱 Responsive design
+- ⚡ Read-only REST API (Express)
+
+Ordering, cart, checkout, contact forms, e-mails and admin were removed on 12 Nov 2026 so the demo cannot collect orders or personal data. They remain in the git history (see [DEMO.md](DEMO.md)).
 
 ---
 
 # 🏗 Architecture
 
 ```text
-            Customer
-                │
-                ▼
-          React Frontend
-                │
-                ▼
-          Express Backend
-                │
-        ┌───────┴────────┐
-        ▼                ▼
- Product Data      Contact Form
-        │                │
-        ▼                ▼
-      Resend Email Notifications
+   React Frontend  ──►  Express API (GET /api/products)  ──►  Demo product data
 ```
 
 ---
 
 # 🛠 Tech Stack
 
-- React
+- React, React Router
 - JavaScript
-- Node.js
-- Express
-- HTML
-- CSS
+- Node.js, Express
 - REST API
-- Resend Email API
-
----
-
-# 💼 Business Value
-
-Eco Italia demonstrates a production-ready online store for premium products.
-
-Business capabilities include:
-
-- Product catalog
-- Online customer inquiries
-- Responsive shopping experience
-- Email automation
-- Brand presentation
-- Small business digitalization
-
----
-
-# ⚙️ Main Modules
-
-🛒 Product Catalog
-
-📦 Product Details
-
-📧 Contact Form
-
-📱 Responsive UI
-
-⚡ Email Notifications
 
 ---
 
@@ -99,23 +50,8 @@ Business capabilities include:
 backend/
 frontend/
 README.md
+DEMO.md
 ```
-
----
-
-# 📸 Screenshots
-
-### Homepage
-
-(Add screenshot)
-
-### Product Catalog
-
-(Add screenshot)
-
-### Contact Page
-
-(Add screenshot)
 
 ---
 

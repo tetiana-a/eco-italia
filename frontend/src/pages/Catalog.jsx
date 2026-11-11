@@ -28,7 +28,7 @@ export default function Catalog() {
       <div style={{ padding:'52px 0 40px', textAlign:'center', borderBottom:'1px solid var(--border)' }}>
         <span className="label" style={{ display:'inline-block', marginBottom:14 }}>Kolekce 2026</span>
         <h1 className="sec-title">Katalog produktů</h1>
-        <p className="sec-sub">Přímé z italských regionů — organické, certifikované</p>
+        <p className="sec-sub">Ukázkový katalog — produkty a ceny jsou pouze ilustrativní</p>
       </div>
 
       <div className="container" style={{ padding:'36px 24px 88px' }}>

@@ -15,7 +15,7 @@ export default function ProductCard({ product, delay = 0 }) {
         <Link to={`/produkt/${product.id}`}><h3 className="pcard-name">{product.nameCs}</h3></Link>
         <p className="pcard-origin">{product.origin}</p>
         <div className="pcard-foot">
-          <span className="pcard-price">{product.price} Kč</span>
+          <span className="pcard-price">{product.price.toLocaleString('cs-CZ')} Kč</span>
         </div>
       </div>
     </div>

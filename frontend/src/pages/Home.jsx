@@ -70,7 +70,7 @@ export default function Home() {
                 style={{ position:'absolute', top:0, right:0, width:'68%', height:'72%', objectFit:'cover', borderRadius:10 }}
               />
               <img
-                src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&q=80"
+                src="https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=400&q=80"
                 alt="Italian honey"
                 style={{ position:'absolute', bottom:0, left:0, width:'48%', height:'46%', objectFit:'cover', borderRadius:10, border:'3px solid var(--bg)' }}
               />
@@ -156,9 +156,9 @@ export default function Home() {
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, animation:'fadeIn .8s .3s both' }}>
             {[
               ['https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400&q=80','Toskánský olej'],
-              ['https://images.unsplash.com/photo-1571069411715-0dd10f9f47ab?w=400&q=80','Lanýžová sůl'],
-              ['https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&q=80','Tělový peeling'],
-              ['https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&q=80','Bergamot'],
+              ['https://images.unsplash.com/photo-1777107857518-151355201542?w=400&q=80','Levandulová svíčka'],
+              ['https://images.unsplash.com/photo-1550623685-2227f7bbef18?w=400&q=80','Koupelová sůl'],
+              ['https://images.unsplash.com/photo-1766984702326-1340e8dd38f0?w=400&q=80','Aroma difuzér'],
             ].map(([src,alt],i) => (
               <img key={i} src={src} alt={alt}
                 style={{ width:'100%', aspectRatio:'1', objectFit:'cover', borderRadius:8,

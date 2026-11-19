@@ -18,7 +18,7 @@ Portfolio: https://tetiana-a.github.io/aiAutomationDev/
 
 # ✨ Features
 
-- 🇮🇹 Product catalog with categories, search and sorting (demo data)
+- 🇮🇹 Product catalog with categories, search and sorting — fictional brands and invented prices; illustrative photos from Unsplash
 - 📦 Product detail pages
 - 📱 Responsive design
 - ⚡ Read-only REST API (Express)

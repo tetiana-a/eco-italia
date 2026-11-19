@@ -41,7 +41,7 @@ export default function Product() {
             </span>
             <h1 style={{ fontFamily:'Cormorant Garamond,serif', fontSize:'clamp(28px,3.5vw,46px)', fontWeight:400, marginBottom:6 }}>{product.nameCs}</h1>
             <p style={{ fontSize:13, color:'var(--muted)', fontStyle:'italic', marginBottom:20 }}>{product.name}</p>
-            <div style={{ fontFamily:'Cormorant Garamond,serif', fontSize:36, color:'var(--gold)', marginBottom:24 }}>{product.price} Kč</div>
+            <div style={{ fontFamily:'Cormorant Garamond,serif', fontSize:36, color:'var(--gold)', marginBottom:24 }}>{product.price.toLocaleString('cs-CZ')} Kč</div>
             <p style={{ fontSize:15, color:'var(--muted)', lineHeight:1.8, fontWeight:300, marginBottom:24 }}>{product.desc}</p>
             <p style={{ fontSize:13, color:'var(--muted)', border:'1px solid var(--border)', borderRadius:8, padding:'12px 16px', marginBottom:32 }}>
               Ukázkový produkt — výukový projekt. Zboží nelze objednat ani koupit.

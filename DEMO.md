@@ -13,7 +13,7 @@ Snímky obrazovky před úpravou a po ní archivuje autorka mimo repozitář (ob
 - Na každé stránce je trvalý pruh „UKÁZKOVÝ PROJEKT — nejedná se o skutečný e-shop…“; stejné upozornění je v patičce, na stránce „O projektu“ a u každého produktu.
 - Odstraněn košík, pokladna, objednávkový formulář a automatický potvrzovací e-mail (`/kosik` a `/pokladna` přesměrují na úvodní stránku).
 - Server nepřijímá objednávky ani žádosti o konzultaci: odstraněny `/api/orders`, `/api/consult` a odesílání e-mailů. Odstraněna administrace a nechráněné zápisové API produktů.
-- Odstraněny jméno, telefon, e-mail a adresa Eduarda Korolova a sekce „Zakladatel / Ředitel“ a „Bezplatná konzultace“.
+- Odstraněny osobní kontaktní údaje třetí osoby a sekce „Zakladatel / Ředitel“ a „Bezplatná konzultace“.
 - Odstraněna neověřená tvrzení: „100% bio certifikace“, „48h doručení do ČR“, „EU Organic ✓“, certifikace v popisech produktů, „Přímí výrobci“, „Transparentní ceny“, „Udržitelné balení“.
 - Fotografie převzatá z cizího e-shopu nahrazena fotografií z Unsplash.
 - Vyhledávačům zakázána indexace (`noindex, nofollow`).

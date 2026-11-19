@@ -42,16 +42,16 @@ export default function Catalog() {
               </button>
             ))}
           </div>
-          <div style={{ display:'flex', gap:10 }}>
-            <input className="input" placeholder="Hledat..." value={search} onChange={e=>setSearch(e.target.value)} style={{ width:200 }} />
-            <select className="input" value={sort} onChange={e=>setSort(e.target.value)} style={{ width:160 }}>
+          <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
+            <input className="input" placeholder="Hledat..." value={search} onChange={e=>setSearch(e.target.value)} style={{ flex:'1 1 180px', minWidth:0 }} />
+            <select className="input" value={sort} onChange={e=>setSort(e.target.value)} style={{ flex:'1 1 140px', minWidth:0 }}>
               {SORTS.map(([v,l]) => <option key={v} value={v}>{l}</option>)}
             </select>
           </div>
         </div>
 
         {loading ? (
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:20 }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))', gap:20 }}>
             {[...Array(6)].map((_,i) => <div key={i} style={{ aspectRatio:'3/4', borderRadius:12, background:'linear-gradient(90deg,var(--bg2) 25%,var(--bg3) 50%,var(--bg2) 75%)', backgroundSize:'200% 100%', animation:'shimmer 1.5s infinite' }} />)}
           </div>
         ) : (

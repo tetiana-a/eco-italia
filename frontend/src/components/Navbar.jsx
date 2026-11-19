@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 export function DemoBanner({ spacer = false }) {
   return (
-    <div role="note" aria-hidden={spacer || undefined} style={{ background:'var(--gold)', color:'#04040A', padding:'9px 16px', textAlign:'center', fontSize:13, fontWeight:600, lineHeight:1.45, visibility: spacer ? 'hidden' : 'visible' }}>
+    <div role="note" aria-hidden={spacer || undefined} style={{ background:'var(--gold)', color:'#04040A', padding:'9px 16px', textAlign:'center', fontSize:'clamp(11px,2.9vw,13px)', fontWeight:600, lineHeight:1.45, visibility: spacer ? 'hidden' : 'visible' }}>
       UKÁZKOVÝ PROJEKT — nejedná se o skutečný e-shop. Web vznikl jako výukový a portfoliový projekt Tetiany Kotolup. Zboží nelze objednat ani koupit; produkty a ceny jsou pouze ilustrativní.
     </div>
   );
@@ -32,7 +32,7 @@ export default function Navbar() {
       transition:'all 0.4s',
     }}>
       <DemoBanner />
-      <div className="container" style={{ display:'flex', alignItems:'center', gap:8, padding: scrolled ? '11px 0' : '18px 0', transition:'padding 0.4s' }}>
+      <div className="container" style={{ display:'flex', alignItems:'center', gap:8, paddingTop: scrolled ? 11 : 18, paddingBottom: scrolled ? 11 : 18, transition:'padding 0.4s' }}>
         <Link to="/" style={{ fontFamily:'Cormorant Garamond,serif', fontSize:19, letterSpacing:'0.12em', display:'flex', alignItems:'center', gap:5, flexShrink:0 }}>
           <span style={{ color:'var(--eco2)' }}>ECO</span>
           <span style={{ color:'var(--gold)', margin:'0 1px' }}>·</span>
@@ -48,7 +48,7 @@ export default function Navbar() {
           ))}
         </div>
 
-        <button onClick={()=>setOpen(!open)} className="burger-nav" style={{ display:'none', flexDirection:'column', gap:4, background:'none', border:'none', padding:4, marginLeft:8 }}>
+        <button onClick={()=>setOpen(!open)} className="burger-nav" style={{ display:'none', flexDirection:'column', gap:4, background:'none', border:'none', padding:4, marginLeft:'auto' }} aria-label="Menu">
           <span style={{ width:20, height:1.5, background:'var(--muted)', display:'block' }}/>
           <span style={{ width:20, height:1.5, background:'var(--muted)', display:'block' }}/>
           <span style={{ width:20, height:1.5, background:'var(--muted)', display:'block' }}/>

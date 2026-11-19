@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar, { DemoBanner } from './components/Navbar';
 import Home from './pages/Home';
 import Catalog from './pages/Catalog';
@@ -20,9 +21,28 @@ function BgScene() {
   );
 }
 
+function useReveal() {
+  const loc = useLocation();
+  useEffect(() => {
+    if (!('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    const tag = () => document.querySelectorAll('.section .container > *, .pcard, .sec-head, footer > *').forEach((el, i) => {
+      if (el.dataset.rv) return;
+      el.dataset.rv = 1; el.classList.add('reveal'); el.style.setProperty('--d', `${(i % 4) * 70}ms`); io.observe(el);
+    });
+    tag();
+    const mo = new MutationObserver(tag); // products arrive after fetch
+    mo.observe(document.body, { childList: true, subtree: true });
+    window.scrollTo(0, 0);
+    return () => { io.disconnect(); mo.disconnect(); };
+  }, [loc.pathname]);
+}
+
 function Layout({ children }) {
+  useReveal();
   return (
     <>
+      <div className="scroll-bar" aria-hidden="true" />
       <BgScene />
       <Navbar />
       {/* same banner in page flow, invisible: pushes content below the fixed banner at any text wrap */}

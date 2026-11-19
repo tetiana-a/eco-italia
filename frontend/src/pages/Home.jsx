@@ -26,8 +26,8 @@ export default function Home() {
     <div className="page">
 
       {/* ── HERO: compact, editorial ── */}
-      <section style={{ minHeight:'90vh', display:'flex', flexDirection:'column', justifyContent:'center', paddingTop:80, paddingBottom:48 }}>
-        <div className="container">
+      <section className="hero-sec" style={{ minHeight:'90vh', display:'flex', flexDirection:'column', justifyContent:'center', paddingTop:80, paddingBottom:48 }}>
+        <div className="container" style={{ width:'100%' }}>
           <div className="hero-grid">
 
             {/* Left: text */}
@@ -63,7 +63,7 @@ export default function Home() {
             </div>
 
             {/* Right: editorial image collage */}
-            <div className="hero-img-col" style={{ position:'relative', height:480, animation:'fadeIn .9s .3s both' }}>
+            <div className="hero-img-col hero-float" style={{ position:'relative', height:480, animation:'fadeIn .9s .3s both' }}>
               <img
                 src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=500&q=85"
                 alt="Italian olive oil"
